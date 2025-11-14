@@ -1,0 +1,56 @@
+package org.devops.stages
+import org.utils.SecretsUtil
+
+class PreDeploy implements Serializable{
+
+    def script
+    Map config
+
+    SecretsUtil SecretsUtil
+
+    PreDeploy(def script, Map config){
+        this.scipt=script
+        this.config=config
+        this.secretsUtil=new SecretsUtil(script) 
+    }
+
+
+
+    void run(){
+        script.stage("pre-deployment-steps"){
+            script.container('kubectl'){
+                def checklistScript = script.libraryResource("checklist/pre-deployment.sh")
+                def checklistFolder = "${script.env.WORKSPACE}/checklist"
+                script.sh "mkdir -p ${checklistFolder}"
+
+                def checklistFilePath = "${checklistFolder}/pre-deployment.sh"
+                script.writeFile file: checklistFilePath, text: checklistScript
+
+                def kubeconfigPath = secretsUtil.copySecretFileToWorkspace( config.kubeconfigFile, "kubeconfig.yaml" )
+
+                script.echo "runnig pre-deploy task"
+                script.sh "ls -lrta ${script.env.WORKSPACE}/checklist"
+                script.sh "chmod 775 -R ${checklistFolder}"
+                script.sh "mkdir -p /home/jenkins/.kube"
+                script.echo "secret file path: ${kubeconfigPath}"
+
+                if(script.fileExists(kubeconfigPath)){
+                    script.sh "cp ${kubeconfigPath} /home/jenkins/.kube/config; grep cluster /home/jenkins/.kube/config"
+                } else {
+                    script.error "Kubeconfig file not found at path: ${kubeconfigPath}"
+                }
+
+                def pred = script.sh(script: "checklist/pre-deployment.sh ${config.namespace}", returnStatus: true)
+                if(pred == 0){
+                    script.echo "Pre-deployment checks passed successfully."
+                } else {
+                    script.error "Pre-deployment checks failed. Please review the checklist output."
+                }
+
+
+
+
+            }            
+        }
+    }
+}
