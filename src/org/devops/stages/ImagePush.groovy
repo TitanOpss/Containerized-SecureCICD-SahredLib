@@ -21,7 +21,7 @@ class ImagePush implements Serializable{
                     {
                         script.sh """
 
-                                docker push ${config.artifactoryUrl}/${config.repoName}/${config.env}:${config.ServiceName}:${config.imageTag}
+                                docker push ${config.artifactoryUrl}/${config.repoName}/${config.env}:${config.ServiceName}:${script.env.GENERATED_TAG}
                         """
                     }
                 }

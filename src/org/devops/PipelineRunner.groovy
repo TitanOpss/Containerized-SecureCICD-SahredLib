@@ -19,7 +19,9 @@ class PipelineRunner implements Serializable {
             new Checkout(script, config).run2() //kubernetes deployment yaml checkout
             new CheckmarxSast(script, config).run() //checkmarx sast scan
             new CheckmarxSca(script, config).run() //checkmarx sca scan
-            new DockerBuild(script, config).run() //docker build
+            new TechkStackBuild(script, config).run() //teck stack build
+            def dockerBuild = new DockerBuild(script, config)
+            dockerBuild.run() //docker build
             new TwistlockScan(script, config).run() //twistlock image scan
             new ImagePush(script, config).run() //image push to registry
             new PreDeploy(script, config).run() //pre-deployment steps
