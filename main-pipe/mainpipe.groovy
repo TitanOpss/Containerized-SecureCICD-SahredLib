@@ -23,4 +23,8 @@ fileBranch:'main'           //branch for maniifest files
 buildType: 'npm'                    //build type can be maven, nodejs (currently supported, we can add stages accordingly)
 deployType: 'kubefiles'                   //currently kubefiles (deployment.yaml) not helm ( we can add helm charts deploy stage accordingly
 
+twislock_Report_Format: 'json',          //twislock report format
+twislock_Report_Path: 'twislock-report.json',  //twislock report path
+twislock_Policy: 'Default'               //twislock policy
+
 )
