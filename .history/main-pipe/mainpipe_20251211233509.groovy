@@ -14,7 +14,7 @@ namespace: 'myapp-namespace',
 artifactoryUrl: 'http://artifactory.local',
 repoName: 'myapp-docker-local',
 npmrcFile: 'app-npmrc',                     //if it is npm build ( we can pass accordingly)
-serviceName: 'myapp-service',                // service name 
+serviceName: 'myapp-service',                // service name for sonarqube scan
 repoUrl: 'http://git.local/myorg/myapp.git',
 branch: 'main',
 env: 'dev',
