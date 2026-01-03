@@ -68,7 +68,7 @@ IstioCheck() {
         if [[ $istioAttached -ge 1 ]]; then
             echo "✔ Istio sidecar present."
         else
-            echo " Istio sidecar NOT attached."
+            echo "❌ Istio sidecar NOT attached."
             exit 1
         fi
     done
